@@ -13,8 +13,11 @@ function app(people){
       break;
     case 'no':
       // TODO: search by traits
+      let traits = searchTraits();
+      
       break;
       default:
+        alert("Invalid input. Please try again!")
     app(people); // restart app
       break;
   }
@@ -57,9 +60,15 @@ function mainMenu(person, people){
 
 function searchByName(people){
   let firstName = promptFor("What is the person's first name?", chars);
+  firstName = firstName.toLowerCase();
+  console.log(firstName);
   let lastName = promptFor("What is the person's last name?", chars);
+  lastName = lastName.toLowerCase();
+  console.log(lastName);
 
   let foundPerson = people.filter(function(person){
+    person.firstName = person.firstName.toLowerCase();
+    person.lastName = person.lastName.toLowerCase();
     if(person.firstName === firstName && person.lastName === lastName){
       return true;
     }
@@ -70,7 +79,10 @@ function searchByName(people){
   // TODO: find the person using the name they entered
   return foundPerson;
 }
+// create function for traits (searchByTraits) and insert into app function under 'case No'
+function searchByTraits(people){
 
+}
 // alerts a list of people
 function displayPeople(people){
   alert(people.map(function(person){
@@ -83,6 +95,7 @@ function displayPerson(person){
   // height, weight, age, name, occupation, eye color.
   let personInfo = "First Name: " + person.firstName + "\n";
   personInfo += "Last Name: " + person.lastName + "\n";
+  
   // TODO: finish getting the rest of the information to display
   alert(personInfo);
 }
