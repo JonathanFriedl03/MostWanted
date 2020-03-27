@@ -22,6 +22,7 @@ function app(people){
   }
 }
 // Call the mainMenu function ONLY after you find the SINGLE person you are looking for
+mainMenu(searchResults[0], people);
 // Menu function to call once you find who you are looking for
 function mainMenu(person, people){
   /* Here we pass in the entire person object that we found in our search, as well as the entire original dataset of people. We need people in order to find descendants and other information that the user may want. */
@@ -35,12 +36,15 @@ function mainMenu(person, people){
 
   switch(displayOption){
     case "info":
+      person = displayPerson(person, people);
     // TODO: get person's info
     break;
     case "family":
+      person = displayFamily(person, people);
     // TODO: get person's family
     break;
     case "descendants":
+      person = displayDescandants(person, people);
     // TODO: get person's descendants
     break;
     case "restart":
@@ -53,7 +57,8 @@ function mainMenu(person, people){
   }
 }
 
-function promptForCriterionChoice(people)
+function 
+promptForCriterionChoice(people)
 {
   var searchType = promptFor("Would you like to search by one or mulitple traits? Enter: 'one' or 'mulitple'", chars)
   switch(searchType){
@@ -179,12 +184,10 @@ function displayCriterion(criterion)
   return criterion
 }
 function searchByName(people){
-  let firstName = promptFor("What is the person's first name?", chars);
-  firstName = firstName.toLowerCase();
-  console.log(firstName);
-  let lastName = promptFor("What is the person's last name?", chars);
-  lastName = lastName.toLowerCase();
-  console.log(lastName);
+  let firstName = promptFor("What is the person's first name?", chars).toLocaleLowerCase; 
+  let lastName = promptFor("What is the person's last name?", chars).toLocaleLowerCase;
+ 
+  
 
   let foundPerson = people.filter(function(person){
     person.firstName = person.firstName.toLowerCase();
@@ -197,7 +200,7 @@ function searchByName(people){
     }
   })
   // TODO: find the person using the name they entered
-  return foundPerson;
+  return foundPerson[0];
 }
 // create function for traits (searchByTraits) and insert into app function under 'case No'
 function searchByTraits(people){
@@ -223,6 +226,7 @@ function displayPerson(person){
     console.log(personInfo);
   // TODO: finish getting the rest of the information to display-done
   alert(personInfo);
+  mainMenu(person,people);
 }
 
 // function that prompts and validates user input
