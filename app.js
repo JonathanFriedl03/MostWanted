@@ -55,7 +55,7 @@ function mainMenu(person, people){
 
 function promptForCriterionChoice(people)
 {
-  var searchType = promptFor("Would you like to search by one or multiple traits? Enter: 'one' or 'multiple'", chars)
+  var searchType = promptFor("Would you like to search by one or multiple traits? Enter: 'one' or 'multiple'", oneMultiple).toLowerCase();
   switch(searchType){
     case 'one':
       displayPeople(searchByOneCriterion(people, promptForOneCriterion()));
@@ -67,6 +67,10 @@ function promptForCriterionChoice(people)
       app(people);
     break;
   }
+}
+
+function oneMultiple(input){
+  return input.toLowerCase() == "one" || input.toLowerCase() == "multiple";
 }
 
 function promptForOneCriterion()
@@ -104,7 +108,7 @@ function promptForMultipleCriteria()
   var choice;
   var isValid = true
   while (isValid){
-    choice = promptFor("Which criterion would you like to search for? Criterion Choices:'Gender', 'DOB', 'Height', 'Weight', 'Eye Color', 'Occupation', 'Done'", chars);
+    choice = promptFor("Which criterion would you like to search for? Criterion Choices:'Gender', 'DOB', 'Height', 'Weight', 'Eye Color', 'Occupation', 'Done'", singleCriterion);
     switch (choice){
       case "Gender":
         choices.push("gender");
@@ -133,6 +137,11 @@ function promptForMultipleCriteria()
     }
   }
   return choices;
+}
+
+function singleCriterion(input){
+  var inputs = ["DOB", "Height", "Weight", "Eye Color", "Occupation", "Done"]
+  return inputs.some(x => x == input);
 }
 
 function searchByOneCriterion(people, criterion)
