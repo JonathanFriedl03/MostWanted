@@ -10,6 +10,7 @@ function app(people){
   switch(searchType){
     case 'yes':
       searchResults = searchByName(people);  
+      mainMenu(searchResults,people);
       break;
     case 'no':
       // TODO: search by traits | search by traits will be called by searchByMultipleCriterion
@@ -36,15 +37,15 @@ function mainMenu(person, people){
 
   switch(displayOption){
     case "info":
-      person = displayPerson(person, people);
+       displayPerson(person, people);
     // TODO: get person's info
     break;
     case "family":
-      person = displayFamily(person, people);
+      displayFamily(person, people);
     // TODO: get person's family
     break;
     case "descendants":
-      person = displayDescandants(person, people);
+      displayDescandants(person, people);
     // TODO: get person's descendants
     break;
     case "restart":
@@ -193,15 +194,21 @@ function displayCriterion(criterion)
   return criterion
 }
 function searchByName(people){
-  let firstName = promptFor("What is the person's first name?", chars).toLocaleLowerCase; 
-  let lastName = promptFor("What is the person's last name?", chars).toLocaleLowerCase;
- 
-  
+  let firstName = promptFor("What is the person's first name?", chars).trim();
+  let firstChar = firstName.slice(0, 1);
+  let firstChars = firstName.slice(1);
+  firstChar = firstChar.toUpperCase();
+  firstChars = firstChars.toLowerCase();
+  firstName = firstChar + firstChars;
+  let lastName = promptFor("What is the person's last name?", chars).trim();
+  let lastChar = lastName.slice(0, 1);
+  let lastChars = lastName.slice(1);
+  lastChar = lastChar.toUpperCase();
+  lastChars = lastChars.toLowerCase();
+  lastName = lastChar + lastChars;  
 
   let foundPerson = people.filter(function(person){
-    person.firstName = person.firstName.toLowerCase();
-    person.lastName = person.lastName.toLowerCase();
-    if(person.firstName === firstName && person.lastName === lastName){
+       if(person.firstName === firstName && person.lastName === lastName){
       return true;
     }
     else{
@@ -209,7 +216,7 @@ function searchByName(people){
     }
   })
   // TODO: find the person using the name they entered
-  return foundPerson[0];
+  return foundPerson;
 }
 // create function for traits (searchByTraits) and insert into app function under 'case No'
 function searchByTraits(people){ // Do not need this 
