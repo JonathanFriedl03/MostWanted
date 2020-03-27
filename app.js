@@ -13,22 +13,17 @@ function app(people){
       break;
     case 'no':
       // TODO: search by traits
-      let traits = searchTraits();
-      
+      promptForCriterionChoice(people);
       break;
-      default:
-        alert("Invalid input. Please try again!")
-    app(people); // restart app
-      break;
+    default:
+      alert("Invalid input. Please try again!")
+      app(people); // restart app
+    break;
   }
-  
-  // Call the mainMenu function ONLY after you find the SINGLE person you are looking for
-  mainMenu(searchResults, people);
 }
-
+// Call the mainMenu function ONLY after you find the SINGLE person you are looking for
 // Menu function to call once you find who you are looking for
 function mainMenu(person, people){
-
   /* Here we pass in the entire person object that we found in our search, as well as the entire original dataset of people. We need people in order to find descendants and other information that the user may want. */
 
   if(!person){
@@ -74,7 +69,7 @@ function promptForCriterionChoice(people)
   }
 }
 
-function promptForOneCriteria()
+function promptForOneCriterion()
 {
   var choice = promptFor("Which criterian would you like to search for? Criterion Choices: 'Gender', 'DOB', 'Height', 'Weight', 'Eye Color', 'Occupation'", chars);
   switch(choice){
@@ -101,7 +96,7 @@ function promptForOneCriteria()
   return response;
 }
 
-function promptForMultipleCriterion()
+function promptForMultipleCriteria()
 {
   let choices = [];
   var response;
@@ -141,11 +136,11 @@ function promptForMultipleCriterion()
 function searchByOneCriterion(people, criterion)
 {
   let criterionPicked = promptFor("What is the person's " + displayCriterion(criterion) + "?", chars);
-  let peopleWhoMatch = people.filter(function(el)){
+  let peopleWhoMatch = people.filter(function(el){
     if(el[criterion] == criterionPicked) {
       return el;
     }
-  };
+  });
   return peopleWhoMatch;
 }
 
