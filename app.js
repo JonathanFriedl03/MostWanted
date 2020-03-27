@@ -74,53 +74,55 @@ function promptForOneCriterion()
   var choice = promptFor("Which criterian would you like to search for? Criterion Choices: 'Gender', 'DOB', 'Height', 'Weight', 'Eye Color', 'Occupation'", chars);
   switch(choice){
     case "Gender":
-      response = "Gender";
+      choice = "gender";
       break;
     case "DOB":
-      response = "Height";
+      choice = "dob";
       break;
+    case "Height":
+      choice = "height";
+      break;  
     case "Weight":
-      repsonse = "Weight";
+      choice = "weight";
       break;
     case "Eye Color":
-      repsonse = "Eye Color";
+      choice = "eyeColor";
       break;
     case "Occupation":
-      response = "Occupation";
+      choice = "occupation";
       break;
     default:
       alert("Invalid choice. Please try again.");
-      app(people);
       break;
   }
-  return response;
+  return choice;
 }
 
 function promptForMultipleCriteria()
 {
   let choices = [];
-  var response;
+  var choice;
   var isValid = true
   while (isValid){
-    response = promptFor("Which criterion would you like to search for? Criterion Choices:'Gender', 'DOB', 'Height', 'Weight', 'Eye Color', 'Occupation', 'End'", chars);
+    choice = promptFor("Which criterion would you like to search for? Criterion Choices:'Gender', 'DOB', 'Height', 'Weight', 'Eye Color', 'Occupation', 'End'", chars);
     switch (response){
       case "Gender":
-        responses.push("Gender");
+        choices.push("gender");
         break;
       case "DOB":
-        responses.push("Dob");
+        choices.push("dob");
         break;
       case "Height":
-        responses.push("Height");
+        choices.push("height");
         break;
       case "Weight":
-        responses.push("Weight");
+        choices.push("weight");
         break;
       case "Eye Color":
-        responses.push("Eye Color");
+        choices.push("eye Color");
         break;
       case "Occupation":
-        responses.push("Occupation");
+        choices.push("occupation");
         break;
       case "Done":
         isValid  = false;
