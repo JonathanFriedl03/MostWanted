@@ -156,6 +156,28 @@ function searchByMultipleCriterion(people, criterion)
   return peopleWhoMatch;
 }
 
+function displayCriterion(criterion)
+{
+  switch(criterion)
+  {
+    case "dob":
+      criterion = "DOB"
+      break;
+    case "height":
+      criterion = "Height"
+      break;
+    case "weight":
+      criterion = "Weight"
+      break;
+      case "eyeColor":
+      criterion = "Eye Color"
+      break;
+      case "occupation":
+      criterion = "occupation"
+      break;
+  }
+  return criterion
+}
 function searchByName(people){
   let firstName = promptFor("What is the person's first name?", chars);
   firstName = firstName.toLowerCase();
