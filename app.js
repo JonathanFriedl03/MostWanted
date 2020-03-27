@@ -215,17 +215,13 @@ function displayPerson(person){
   // height, weight, age, name, occupation, eye color.
   let personInfo = "First Name: " + person.firstName + "\n";
   personInfo += "Last Name: " + person.lastName + "\n";
-  personInfo += "Height: " + person.height + ".";
-  personInfo += "Weight: " + person.weight + ".";
-  personInfo += "Age: " + person.dob + ".";
-  personInfo += "Eye Color: " + person.eyeColor + ".";
-  personInfo += "Occupation: " + person.occupation + ".";
-
-  let personDescription = personInfo.reduce(function(total,el){
-    return total + el;
-  })
-  console.log(personDescription);
-  // TODO: finish getting the rest of the information to display
+  personInfo += "Height: " + person.height + "\n";
+  personInfo += "Weight: " + person.weight + "\n";
+  personInfo += "Age: " + person.dob + "\n";
+  personInfo += "Eye Color: " + person.eyeColor + "\n";
+  personInfo += "Occupation: " + person.occupation + "\n";
+    console.log(personInfo);
+  // TODO: finish getting the rest of the information to display-done
   alert(personInfo);
 }
 
