@@ -9,7 +9,7 @@ function app(people){
   let searchResults;
   switch(searchType){
     case 'yes':
-      searchResults = searchByName(people);
+      searchResults = searchByName(people);  
       break;
     case 'no':
       // TODO: search by traits
