@@ -58,6 +58,107 @@ function mainMenu(person, people){
   }
 }
 
+function promptForCriterionChoice(people)
+{
+  var searchType = promptFor("Would you like to search by one or mulitple traits? Enter: 'one' or 'mulitple'", chars)
+  switch(searchType){
+    case 'one':
+      displayPeople(searchByOneCriterion(people, promptForOneCriterion()));
+      break;
+    case 'Multiple':
+      displayPeople(searchByMultipleCriteria(people, promptByManyCriteria()));
+      break;
+    default:
+      app(people);
+    break;
+  }
+}
+
+function promptForOneCriteria()
+{
+  var choice = promptFor("Which criterian would you like to search for? Criterion Choices: 'Gender', 'DOB', 'Height', 'Weight', 'Eye Color', 'Occupation'", chars);
+  switch(choice){
+    case "Gender":
+      response = "Gender";
+      break;
+    case "DOB":
+      response = "Height";
+      break;
+    case "Weight":
+      repsonse = "Weight";
+      break;
+    case "Eye Color":
+      repsonse = "Eye Color";
+      break;
+    case "Occupation":
+      response = "Occupation";
+      break;
+    default:
+      alert("Invalid choice. Please try again.");
+      app(people);
+      break;
+  }
+  return response;
+}
+
+function promptForMultipleCriterion()
+{
+  let choices = [];
+  var response;
+  var isValid = true
+  while (isValid){
+    response = promptFor("Which criterion would you like to search for? Criterion Choices:'Gender', 'DOB', 'Height', 'Weight', 'Eye Color', 'Occupation', 'End'", chars);
+    switch (response){
+      case "Gender":
+        responses.push("Gender");
+        break;
+      case "DOB":
+        responses.push("Dob");
+        break;
+      case "Height":
+        responses.push("Height");
+        break;
+      case "Weight":
+        responses.push("Weight");
+        break;
+      case "Eye Color":
+        responses.push("Eye Color");
+        break;
+      case "Occupation":
+        responses.push("Occupation");
+        break;
+      case "Done":
+        isValid  = false;
+        break;
+      default:
+        alert("Invalid choice. Please try again.")
+        break;
+    }
+  }
+  return choices;
+}
+
+function searchByOneCriterion(people, criterion)
+{
+  let criterionPicked = promptFor("What is the person's " + displayCriterion(criterion) + "?", chars);
+  let peopleWhoMatch = people.filter(function(el)){
+    if(el[criterion] == criterionPicked) {
+      return el;
+    }
+  };
+  return peopleWhoMatch;
+}
+
+function searchByMultipleCriterion(people, criterion)
+{
+  var peopleWhoMatch = people;
+  for(criteria in criterion)
+  { 
+    peopleWhoMatch = searchByOneCriterion(peopleWhoMatch, criterion[criteria]);
+  }
+  return peopleWhoMatch;
+}
+
 function searchByName(people){
   let firstName = promptFor("What is the person's first name?", chars);
   firstName = firstName.toLowerCase();
