@@ -13,22 +13,17 @@ function app(people){
       break;
     case 'no':
       // TODO: search by traits
-      let traits = searchTraits();
-      
+      promptForCriterionChoice(people);
       break;
-      default:
-        alert("Invalid input. Please try again!")
-    app(people); // restart app
-      break;
+    default:
+      alert("Invalid input. Please try again!")
+      app(people); // restart app
+    break;
   }
-  
-  // Call the mainMenu function ONLY after you find the SINGLE person you are looking for
-  mainMenu(searchResults, people);
 }
-
+// Call the mainMenu function ONLY after you find the SINGLE person you are looking for
 // Menu function to call once you find who you are looking for
 function mainMenu(person, people){
-
   /* Here we pass in the entire person object that we found in our search, as well as the entire original dataset of people. We need people in order to find descendants and other information that the user may want. */
 
   if(!person){
@@ -58,6 +53,131 @@ function mainMenu(person, people){
   }
 }
 
+function promptForCriterionChoice(people)
+{
+  var searchType = promptFor("Would you like to search by one or mulitple traits? Enter: 'one' or 'mulitple'", chars)
+  switch(searchType){
+    case 'one':
+      displayPeople(searchByOneCriterion(people, promptForOneCriterion()));
+      break;
+    case 'Multiple':
+      displayPeople(searchByMultipleCriteria(people, promptByManyCriteria()));
+      break;
+    default:
+      app(people);
+    break;
+  }
+}
+
+function promptForOneCriterion()
+{
+  var choice = promptFor("Which criterian would you like to search for? Criterion Choices: 'Gender', 'DOB', 'Height', 'Weight', 'Eye Color', 'Occupation'", chars);
+  switch(choice){
+    case "Gender":
+      choice = "gender";
+      break;
+    case "DOB":
+      choice = "dob";
+      break;
+    case "Height":
+      choice = "height";
+      break;  
+    case "Weight":
+      choice = "weight";
+      break;
+    case "Eye Color":
+      choice = "eyeColor";
+      break;
+    case "Occupation":
+      choice = "occupation";
+      break;
+    default:
+      alert("Invalid choice. Please try again.");
+      break;
+  }
+  return choice;
+}
+
+function promptForMultipleCriteria()
+{
+  let choices = [];
+  var choice;
+  var isValid = true
+  while (isValid){
+    choice = promptFor("Which criterion would you like to search for? Criterion Choices:'Gender', 'DOB', 'Height', 'Weight', 'Eye Color', 'Occupation', 'End'", chars);
+    switch (response){
+      case "Gender":
+        choices.push("gender");
+        break;
+      case "DOB":
+        choices.push("dob");
+        break;
+      case "Height":
+        choices.push("height");
+        break;
+      case "Weight":
+        choices.push("weight");
+        break;
+      case "Eye Color":
+        choices.push("eye Color");
+        break;
+      case "Occupation":
+        choices.push("occupation");
+        break;
+      case "Done":
+        isValid  = false;
+        break;
+      default:
+        alert("Invalid choice. Please try again.")
+        break;
+    }
+  }
+  return choices;
+}
+
+function searchByOneCriterion(people, criterion)
+{
+  let criterionPicked = promptFor("What is the person's " + displayCriterion(criterion) + "?", chars);
+  let peopleWhoMatch = people.filter(function(el){
+    if(el[criterion] == criterionPicked) {
+      return el;
+    }
+  });
+  return peopleWhoMatch;
+}
+
+function searchByMultipleCriterion(people, criterion)
+{
+  var peopleWhoMatch = people;
+  for(criteria in criterion)
+  { 
+    peopleWhoMatch = searchByOneCriterion(peopleWhoMatch, criterion[criteria]);
+  }
+  return peopleWhoMatch;
+}
+
+function displayCriterion(criterion)
+{
+  switch(criterion)
+  {
+    case "dob":
+      criterion = "DOB"
+      break;
+    case "height":
+      criterion = "Height"
+      break;
+    case "weight":
+      criterion = "Weight"
+      break;
+      case "eyeColor":
+      criterion = "Eye Color"
+      break;
+      case "occupation":
+      criterion = "occupation"
+      break;
+  }
+  return criterion
+}
 function searchByName(people){
   let firstName = promptFor("What is the person's first name?", chars);
   firstName = firstName.toLowerCase();
