@@ -12,7 +12,7 @@ function app(people){
       searchResults = searchByName(people);
       break;
     case 'no':
-      // TODO: search by traits
+      // TODO: search by traits | search by traits will be called by searchByMultipleCriterion
       promptForCriterionChoice(people);
       break;
     default:
@@ -55,13 +55,13 @@ function mainMenu(person, people){
 
 function promptForCriterionChoice(people)
 {
-  var searchType = promptFor("Would you like to search by one or mulitple traits? Enter: 'one' or 'mulitple'", chars)
+  var searchType = promptFor("Would you like to search by one or multiple traits? Enter: 'one' or 'multiple'", chars)
   switch(searchType){
     case 'one':
       displayPeople(searchByOneCriterion(people, promptForOneCriterion()));
       break;
-    case 'Multiple':
-      displayPeople(searchByMultipleCriteria(people, promptByManyCriteria()));
+    case 'multiple':
+      displayPeople(searchByMultipleCriteria(people, promptForMultipleCriteria()));
       break;
     default:
       app(people);
@@ -104,8 +104,8 @@ function promptForMultipleCriteria()
   var choice;
   var isValid = true
   while (isValid){
-    choice = promptFor("Which criterion would you like to search for? Criterion Choices:'Gender', 'DOB', 'Height', 'Weight', 'Eye Color', 'Occupation', 'End'", chars);
-    switch (response){
+    choice = promptFor("Which criterion would you like to search for? Criterion Choices:'Gender', 'DOB', 'Height', 'Weight', 'Eye Color', 'Occupation', 'Done'", chars);
+    switch (choice){
       case "Gender":
         choices.push("gender");
         break;
@@ -146,7 +146,7 @@ function searchByOneCriterion(people, criterion)
   return peopleWhoMatch;
 }
 
-function searchByMultipleCriterion(people, criterion)
+function searchByMultipleCriteria(people, criterion)
 {
   var peopleWhoMatch = people;
   for(criteria in criterion)
@@ -169,10 +169,10 @@ function displayCriterion(criterion)
     case "weight":
       criterion = "Weight"
       break;
-      case "eyeColor":
+    case "eyeColor":
       criterion = "Eye Color"
       break;
-      case "occupation":
+    case "occupation":
       criterion = "occupation"
       break;
   }
@@ -200,7 +200,7 @@ function searchByName(people){
   return foundPerson;
 }
 // create function for traits (searchByTraits) and insert into app function under 'case No'
-function searchByTraits(people){
+function searchByTraits(people){ // Do not need this 
 
 }
 // alerts a list of people
@@ -230,10 +230,10 @@ function displayPerson(person){
 }
 
 // function that prompts and validates user input
-function promptFor(question, valid){
+function promptFor(question, value){
   do{
     var response = prompt(question).trim();
-  } while(!response || !valid(response));
+  } while(!response || !value(response));
   return response;
 }
 
