@@ -4,11 +4,11 @@ Build all of your functions for displaying and gathering information below (GUI)
 */
 
 // app is the function called to start the entire application
-function app(people){
-  let searchType = promptFor("Do you know the name of the person you are looking for? Enter 'yes' or 'no'", yesNo).toLowerCase();
+function app(people)
+{ let searchType = promptFor("Do you know the name of the person you are looking for? Enter 'yes' or 'no'", yesNo).toLowerCase();
   let searchResults;
-  switch(searchType){
-    case 'yes':
+  switch(searchType)
+  {  case 'yes':
      let searchResults = searchByName(people);  
       mainMenu(searchResults,people);
       break;
@@ -23,44 +23,87 @@ function app(people){
     break;
   }
 }
-function searchByTraits(people) {
-  let userSearchChoice = prompt("What would you like to search by? 'height', 'weight', 'eye color', 'gender', 'age', 'occupation'.", "").toLowerCase();
+function searchByTraits(people) 
+{  let userSearchChoice = prompt("What would you like to search by? 'height', 'weight', 'eye color', 'gender', 'age', 'occupation'.", "").toLowerCase();
   userSearchChoice = userSearchChoice.split(", ");
   let filteredPeople = [];
-  for(let i = 0; i < userSearchChoice.length; i++){
-  switch(userSearchChoice[i]) {
-    case "height":
-      filteredPeople.push(searchByHeight(people));
-      break;
-    case "weight":
-      filteredPeople.push(searchByWeight(people));
-      break;
-    case "eye color":
-      filteredPeople.push(searchByEyeColor(people));
-      break;
-    case "gender":
-      filteredPeople.push(searchByGender(people));
-      break;
-    case "age": 
-      filteredPeople.push(searchByAge(people));
-      break;
-    case "occupation":
-      filteredPeople.push(searchByOccupation(people));
-      break;
-    default:
+  for(let i = 0; i < userSearchChoice.length; i++)
+  {  switch(userSearchChoice[i]) 
+    {   case "height":
+        filteredPeople.push(searchByHeight(people));
+        break;
+        case "weight":
+        filteredPeople.push(searchByWeight(people));
+        break;
+        case "eye color":
+        filteredPeople.push(searchByEyeColor(people));
+        break;
+        case "gender":
+        filteredPeople.push(searchByGender(people));
+        break;
+        case "age": 
+        filteredPeople.push(searchByAge(people));
+        break;
+        case "occupation":
+        filteredPeople.push(searchByOccupation(people));
+        break;
+        default:
       alert("You entered an invalid search type! Please try again.");
       searchByTraits(people);
       break;
-  }    
-  filteredPeople = reduceArray(filteredPeople);
+    }      filteredPeople = reduceArray(filteredPeople);
   alert(filteredPeople.length + " were found matching the criteria.");
 
-    for (let i = 0; i < filteredPeople.length; i++){
-    let foundPerson = filteredPeople[i];
-    mainMenu(foundPerson, people)
-  }
+    for (let i = 0; i < filteredPeople.length; i++)
+    { let foundPerson = filteredPeople[i];
+      mainMenu(foundPerson, people)
+    }
   } 
 } 
+function searchByHeight(people) 
+{ let userInputHeight = prompt("How tall is the person?", "");
+  let newArray = people.filter(function (el) 
+  { if(el.height == userInputHeight) 
+    {
+      return true;
+    }
+  });
+  return newArray;
+}
+
+function searchByWeight(people)
+{ let userInputWeight = prompt("How much does the person weigh?", "");
+  let newArray = people.filter(function (el) 
+  {if(el.weight == userInputWeight) 
+    {
+      return true;
+    }
+  });
+  return newArray;
+}
+
+function searchByEyeColor(people)
+{ let userInputEyeColor = prompt("What color eyes does the person have?", "");
+  let newArray = people.filter(function (el) 
+  {if(el.eyeColor == userInputEyeColor) 
+    {
+      return true;
+    }
+  });
+  return newArray;
+}
+
+function searchByGender(people) 
+{ let userInputGender = prompt("Is the person male or female?", "");
+  let newArray = people.filter(function (el) 
+  {
+    if(el.gender == userInputGender) 
+    {
+      return true;
+    }
+  });
+  return newArray;
+}
 // Call the mainMenu function ONLY after you find the SINGLE person you are looking for
 //mainMenu(searchResults, people);
 // Menu function to call once you find who you are looking for
