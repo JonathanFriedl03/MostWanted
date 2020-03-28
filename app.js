@@ -111,6 +111,44 @@ function searchByOccupation(people)
   });
   return newArray;
 }
+
+function searchByAge(people)
+{ let userInputAge = prompt("How old is the person?", "");
+userInputAge = parseInt(userInputAge);
+let todaysDate = prompt("What is today's date? Month/Day/Year", "");
+let age = determineAge(userInputAge, todaysDate, people);
+}
+
+function determineAge(userInputAge, todaysDate, people){
+let age = 0;
+let todaysDateArray = todaysDate.split("/");//make function determine age
+let newArray = people.filter(function(el){
+age = 0;
+let birthDateArray = el.dob.split("/");
+if (parseInt(birthDateArray[0])<parseInt(todaysDateArray[0])){
+  age = 2020 - parseInt(birthDateArray[2]);
+}
+else if (parseInt(birthDateArray[0])>parseInt(todaysDateArray[0])){
+  age = 2019- parseInt(birthDateArray[2]);
+}
+else{
+  if(parseInt(birthDateArray[1])<parseInt(todaysDateArray[1])){
+    age = 2019 - parseInt(birthDateArray[2]);
+  }
+  else{
+    age = 2020 - parseInt(birthDateArray[2]);
+  }
+}
+if(age === userInputAge) {
+  console.log (el.firstName);
+  return true;
+}
+else {
+  return false;
+}
+});
+return newArray;
+}
 // Call the mainMenu function ONLY after you find the SINGLE person you are looking for
 //mainMenu(searchResults, people);
 // Menu function to call once you find who you are looking for
@@ -130,13 +168,13 @@ function mainMenu(person, people){
     // TODO: get person's info
     break;
     case "family":
-     let familyArray = findFamily(person, people);
+     findFamily(person, people);
     // TODO: get person's family
     break;
     case "descendants":
       let descendantsArray = findDescandants(person, people);
       console.log(person.firstName + "'s descendants");
-      //need more logic here
+      //need more logic here?
     // TODO: get person's descendants
     break;
     case "restart":
@@ -147,7 +185,28 @@ function mainMenu(person, people){
     default:
     return mainMenu(person, people); // ask again
   }
+ 
+  function findFamily(people, person){
+    let spouse;
+    let parentsArray = [];
+    let siblingsArray;
+    let descendantsArray = [];
+    spouse = getSpouse(people, person);//started a function
+    parentsArray = getParents(people, person);//needs a functin
+    siblingsArray = getSiblings(people, person);//needs a functin
+    descendantsArray = getChildren(people, person);//needs a functin
+  }
 }
+
+function getSpouse(people, person){
+  for (let i = 0; i < people.length; i++){
+    if (people[i].currentSpouse === person.personId) {
+    console.log(person.firstName + " " + person.lastName + " is married to " + people[i].firstName + " " + people[i].lastName + ".");
+    return people[i];
+    } 
+  } 
+ } 
+ 
 function searchByName(people){
   let firstName = promptFor("What is the person's first name?", chars).trim();
   let firstChar = firstName.slice(0, 1);
