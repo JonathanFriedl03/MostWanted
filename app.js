@@ -5,8 +5,8 @@ Build all of your functions for displaying and gathering information below (GUI)
 
 // app is the function called to start the entire application
 function app(people){
-  let searchType = promptFor("Do you know the name of the person you are looking for? Enter 'yes' or 'no'", yesNo).toLowerCase();
-  let searchResults;
+  var searchType = promptFor("Do you know the name of the person you are looking for? Enter 'yes' or 'no'", yesNo).toLowerCase();
+  var searchResults;
   switch(searchType){
     case 'yes':
       searchResults = searchByName(people);  
@@ -30,23 +30,30 @@ function mainMenu(person, people){
     alert("Could not find that individual.");
     return app(people); // restart
   }
-
-  let displayOption = prompt("Found " + person.firstName + " " + person.lastName + " . Do you want to know their 'info', 'family', or 'descendants'? Type the option you want or 'restart' or 'quit'");
+  var displayOption = prompt("Found " + person.firstName + " " + person.lastName + " . Do you want to know their 'info', 'family', or 'descendants'? Type the option you want or 'restart' or 'quit'");
 
   switch(displayOption){
     case "info":
     // TODO: get person's info
+    displayPerson(person);
+    mainMenu(person,people);
     break;
+    
     case "family":
     // TODO: get person's family
+    //will need a displayFamily()
     break;
+   
     case "descendants":
     // TODO: get person's descendants
+    //will need a displayDescendants()
     break;
+   
     case "restart":
     app(people); // restart
     break;
-    case "quit":
+   
+   case "quit":
     return; // stop execution
     default:
     return mainMenu(person, people); // ask again
@@ -146,13 +153,13 @@ function singleCriterion(input){
 
 function searchByOneCriterion(people, criterion)
 {
-  let criterionPicked = promptFor("What is the person's " + displayCriterion(criterion) + "?", chars);
-  let peopleWhoMatch = people.filter(function(el){
+  var criterionPicked = promptFor("What is the person's " + displayCriterion(criterion) + "?", chars);
+  var peopleWhoMatch = people.filter(function(el){
     if(el[criterion] == criterionPicked) {
       return el;
     }
   });
-  return peopleWhoMatch;
+  return peopleWhoMatch; 
 }
 
 function searchByMultipleCriteria(people, criterion)
@@ -188,10 +195,10 @@ function displayCriterion(criterion)
   return criterion
 }
 function searchByName(people){
-  let firstName = promptFor("What is the person's first name?", chars);
+  var firstName = promptFor("What is the person's first name?", chars);
   firstName = firstName.toLowerCase();
   console.log(firstName);
-  let lastName = promptFor("What is the person's last name?", chars);
+  var lastName = promptFor("What is the person's last name?", chars);
   lastName = lastName.toLowerCase();
   console.log(lastName);
 
@@ -233,6 +240,12 @@ function displayPerson(person){
   // TODO: finish getting the rest of the information to display-done
   alert(personInfo);
 }
+
+//Need displayFamily()
+
+//Need displayDescendants()
+
+function chooseGender
 
 // function that prompts and validates user input
 function promptFor(question, value){
