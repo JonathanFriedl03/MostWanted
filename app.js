@@ -1,3 +1,4 @@
+
 "use strict"
 /*
 Build all of your functions for displaying and gathering information below (GUI).
@@ -6,7 +7,6 @@ Build all of your functions for displaying and gathering information below (GUI)
 // app is the function called to start the entire application
 function app(people){
   let searchType = promptFor("Do you know the name of the person you are looking for? Enter 'yes' or 'no'", yesNo).toLowerCase();
-  let searchResults;
   switch(searchType){
     case 'yes':
       var person = searchByName(people); 
@@ -14,8 +14,8 @@ function app(people){
       break;
     case 'no':
       // TODO: search by traits | search by traits will be called by searchByMultipleCriterion
-      var person = searchByTraits(people);
-      mainMenu(person, people);
+      promptForTraitChoice(people);
+      //mainMenu(person, people);
       break;
     default:
       alert("Invalid input. Please try again!")
@@ -23,41 +23,156 @@ function app(people){
     break;
   }
 }
-
-function searchByTraits(people) {
-  let userSearchChoice = prompt("What would you like to search by? 'height', 'weight', 'eye color', 'gender', 'age', 'occupation'.", "").toLowerCase();
-  userSearchChoice = userSearchChoice.split(", ");
-  let filteredPeople = [];
-  
-  for(let i = 0; i < userSearchChoice.length; i++){
-    switch(userSearchChoice[i]) {
-      case "height":
-        filteredPeople.push(searchByHeight(people));
-        break;
-      case "weight":
-        filteredPeople.push(searchByWeight(people));
-        break;
-      case "eye color":
-        filteredPeople.push(searchByEyeColor(people));
-        break;
-      case "gender":
-        filteredPeople.push(searchByGender(people));
-        break;
-      case "age": 
-        filteredPeople.push(searchByAge(people));
-        break;
-      case "occupation":
-        filteredPeople.push(searchByOccupation(people));
-        break;
-      default:
-        alert("You entered an invalid search type! Please try again.");
-        searchByTraits(people);
-        break;
-    }      
-    return filteredPeople;
-    alert(filteredPeople.length + " people were found matching the criteria.");//might want to do more here to redirect them elsewhere
+function promptForTraitChoice(people){
+  var searchType = promptFor("Would you like to search by one or multiple traits? Enter: 'one' or 'multiple'", oneMultiple).toLowerCase();
+  switch(searchType){
+    case 'one':
+      displayPeople(searchByOneTrait(people, promptForOneTrait()));
+      break;
+    case 'multiple':
+      displayPeople(searchByMultipleTraits(people, promptForMultipleTraits()));
+      break;
+    default:
+      app(people);
+    break;
   }
 }
+
+function promptForOneTrait(){
+  var choice = promptFor("Which trait would you like to search for? Trait Choices: 'Gender', 'DOB', 'Height', 'Weight', 'Eye Color', 'Occupation'", chars);
+  switch(choice){
+    case "Gender":
+      choice = "gender";
+      break;
+    case "DOB":
+      choice = "dob";
+      break;
+    case "Height":
+      choice = "height";
+      break;  
+    case "Weight":
+      choice = "weight";
+      break;
+    case "Eye Color":
+      choice = "eyeColor";
+      break;
+    case "Occupation":
+      choice = "occupation";
+      break;
+    default:
+      alert("Invalid choice. Please try again.");
+      break;
+  }
+  return choice;
+}
+
+function promptForMultipleTraits(){
+  let choices = [];
+  var choice;
+  var isValid = true
+  while (isValid){
+    choice = promptFor("Which trait would you like to search for? Criterion Choices:'Gender', 'DOB', 'Height', 'Weight', 'Eye Color', 'Occupation', 'Done'", oneTrait);
+    switch (choice){
+      case "Gender":
+        choices.push("gender");
+        break;
+      case "DOB":
+        choices.push("dob");
+        break;
+      case "Height":
+        choices.push("height");
+        break;
+      case "Weight":
+        choices.push("weight");
+        break;
+      case "Eye Color":
+        choices.push("eye Color");
+        break;
+      case "Occupation":
+        choices.push("occupation");
+        break;
+      case "Done":
+        isValid  = false;
+        break;
+      default:
+        alert("Invalid choice. Please try again.")
+        break;
+    }
+  }
+  return choices;
+}
+
+function searchByOneTrait(people, trait){
+  let traitPicked = promptFor("What is the person's " + displayTrait(trait) + "?", chars);
+  let peopleWhoMatch = people.filter(function(el){
+    if(el[trait] == traitPicked) {
+      return el;
+    }
+  });
+  return peopleWhoMatch;
+}
+
+function searchByMultipleTraits(people, trait){
+  var peopleWhoMatch = people;
+  for(trait in traits){
+    peopleWhoMatch = searchByOneTrait(peopleWhoMatch, trait[traits]);
+  }
+  return peopleWhoMatch;
+}
+function displayTrait(trait){
+  switch(trait){
+    case "dob":
+      trait = "DOB"
+      break;
+    case "height":
+      trait = "Height"
+      break;
+    case "weight":
+      trait = "Weight"
+      break;
+    case "eyeColor":
+      trait = "Eye Color"
+      break;
+    case "occupation":
+      trait = "occupation"
+      break;
+  }
+  return trait
+}  
+// function searchByTraits(people) {
+//   let userSearchChoice = prompt("What would you like to search by? 'height', 'weight', 'eye color', 'gender', 'age', 'occupation'.", "").toLowerCase();
+//   userSearchChoice = userSearchChoice.split(", ");
+//   let filteredPeople = [];
+  
+//   for(let i = 0; i < userSearchChoice.length; i++){
+//     switch(userSearchChoice[i]) {
+//       case "height":
+//         filteredPeople.push(searchByHeight(people));
+//         break;
+//       case "weight":
+//         filteredPeople.push(searchByWeight(people));
+//         break;
+//       case "eye color":
+//         filteredPeople.push(searchByEyeColor(people));
+//         break;
+//       case "gender":
+//         filteredPeople.push(searchByGender(people));
+//         break;
+//       case "age": 
+//         filteredPeople.push(searchByAge(people));
+//         break;
+//       case "occupation":
+//         filteredPeople.push(searchByOccupation(people));
+//         break;
+//       default:
+//         alert("You entered an invalid search type! Please try again.");
+//         searchByTraits(people);
+//         break;
+//     }      
+//     return filteredPeople;
+//     alert(filteredPeople.length + " people were found matching the criteria.");//might want to do more here to redirect them elsewhere
+//   }
+// }
 
 function searchByHeight(people) {
   let userInputHeight = prompt("How tall is the person in inches", "");
@@ -256,8 +371,8 @@ function getChildren(people, person)//needs to be finished and will need to have
 }
 
 function searchByName(people){
-  var firstName = prompt("What is the person's first name?", "");
-  var lastName = prompt("What is the person's last name?", "");
+  var firstName = promptFor("What is the person's first name?", chars);
+  var lastName = promptFor("What is the person's last name?", chars);
 
     let filteredPeople = people.filter(function(el){
     if(el.firstName === firstName && el.lastName === lastName){
@@ -276,7 +391,7 @@ function searchByName(people){
 // alerts a list of people
 function displayPeople(people) {
   alert(people.map(function (person) {
-    return person.firstName + " " + person.lastName;
+    return person.firstName + " " + person.lastName + " " + person.gender + " " + person.dob + " " + person.height + " " + person.weight + " " + person.eyeColor + " " + person.occupation
   }).join("\n"));
 }
 
@@ -300,7 +415,7 @@ function promptFor(question, callback){
     var response = prompt(question).trim();
   } while(!response || !callback(response));
   return response;
-}
+  }
 
 // helper function to pass into promptFor to validate yes/no answers
 function yesNo(input){
@@ -311,128 +426,17 @@ function yesNo(input){
 function chars(input){
   return true; // default validation only
 }
-// function promptForTraitChoice(people){
-//   var searchType = promptFor("Would you like to search by one or multiple traits? Enter: 'one' or 'multiple'", oneMultiple).toLowerCase();
-//   switch(searchType){
-//     case 'one':
-//       displayPeople(searchByOneTrait(people, promptForOneTrait()));
-//       break;
-//     case 'multiple':
-//       displayPeople(searchByMultipleTraits(people, promptForMultipleTraits()));
-//       break;
-//     default:
-//       app(people);
-//     break;
-//   }
-// }
-// function oneMultiple(input){
-//   return input.toLowerCase() == "one" || input.toLowerCase() == "multiple";
-// }
-
-// function promptForOneTrait(){
-//   var choice = promptFor("Which trait would you like to search for? Trait Choices: 'Gender', 'DOB', 'Height', 'Weight', 'Eye Color', 'Occupation'", chars);
-//   switch(choice){
-//     case "Gender":
-//       choice = "gender";
-//       break;
-//     case "DOB":
-//       choice = "dob";
-//       break;
-//     case "Height":
-//       choice = "height";
-//       break;  
-//     case "Weight":
-//       choice = "weight";
-//       break;
-//     case "Eye Color":
-//       choice = "eyeColor";
-//       break;
-//     case "Occupation":
-//       choice = "occupation";
-//       break;
-//     default:
-//       alert("Invalid choice. Please try again.");
-//       break;
-//   }
-//   return choice;
-// }
-
-// function promptForMultipleTraits(){
-//   let choices = [];
-//   var choice;
-//   var isValid = true
-//   while (isValid){
-//     choice = promptFor("Which trait would you like to search for? Criterion Choices:'Gender', 'DOB', 'Height', 'Weight', 'Eye Color', 'Occupation', 'Done'", singleCriterion);
-//     switch (choice){
-//       case "Gender":
-//         choices.push("gender");
-//         break;
-//       case "DOB":
-//         choices.push("dob");
-//         break;
-//       case "Height":
-//         choices.push("height");
-//         break;
-//       case "Weight":
-//         choices.push("weight");
-//         break;
-//       case "Eye Color":
-//         choices.push("eye Color");
-//         break;
-//       case "Occupation":
-//         choices.push("occupation");
-//         break;
-//       case "Done":
-//         isValid  = false;
-//         break;
-//       default:
-//         alert("Invalid choice. Please try again.")
-//         break;
-//     }
-//   }
-//   return choices;
-// }
-
+function oneMultiple(input){
+  return input.toLowerCase() == "one" || input.toLowerCase() == "multiple";
+}
+function oneTrait(input){
+  var inputs = ["First Name", "Last Name", "Date of Birth", "Height", "Weight", "Eye Color", "Occupation", "STOP"]
+  return inputs.some(x => x == input);
+}
 // function singleTrait(input){
 //   var inputs = ["DOB", "Height", "Weight", "Eye Color", "Occupation", "Done"]
 //   return inputs.some(x => x == input);
 // }
 
-// function searchByOneTrait(people, trait){
-//   let traitPicked = promptFor("What is the person's " + displayTrait(trait) + "?", chars);
-//   let peopleWhoMatch = people.filter(function(el){
-//     if(el[trait] == traitPicked) {
-//       return el;
-//     }
-//   });
-//   return peopleWhoMatch;
-// }
 
-// function searchByMultipleTraits(people, trait){
-//   var peopleWhoMatch = people;
-//   for(trait in traits){
-//     peopleWhoMatch = searchByOneTrait(peopleWhoMatch, trait[traits]);
-//   }
-//   return peopleWhoMatch;
-// }
 
-// function displayTrait(trait){
-//   switch(trait){
-//     case "dob":
-//       trait = "DOB"
-//       break;
-//     case "height":
-//       trait = "Height"
-//       break;
-//     case "weight":
-//       trait = "Weight"
-//       break;
-//     case "eyeColor":
-//       trait = "Eye Color"
-//       break;
-//     case "occupation":
-//       trait = "occupation"
-//       break;
-//   }
-//   return trait
-// }  
