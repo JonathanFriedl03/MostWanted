@@ -9,12 +9,12 @@ function app(people)
   let searchResults;
   switch(searchType)
   {  case 'yes':
-     let searchResults = searchByName(people);  
+     searchResults = searchByName(people);  
       mainMenu(searchResults,people);
       break;
     case 'no':
       // TODO: search by traits | search by traits will be called by searchByMultipleCriterion
-      searchByTraits(people);
+      seaerachResults = searchByTraits(people);
       //promptForCriterionChoice(people);
       break;
     default:
@@ -52,14 +52,9 @@ function searchByTraits(people)
       searchByTraits(people);
       break;
     }      filteredPeople = reduceArray(filteredPeople);
-  alert(filteredPeople.length + " were found matching the criteria.");
-
-    for (let i = 0; i < filteredPeople.length; i++)
-    { let foundPerson = filteredPeople[i];
-      mainMenu(foundPerson, people)
-    }
-  } 
-} 
+  alert(filteredPeople.length + " people were found matching the criteria.");
+  }
+  }
 function searchByHeight(people) 
 { let userInputHeight = prompt("How tall is the person?", "");
   let newArray = people.filter(function (el) 
@@ -104,6 +99,18 @@ function searchByGender(people)
   });
   return newArray;
 }
+function searchByOccupation(people) 
+{
+  let userInputOccupation = prompt("What is the person's occupation?", "");
+  let newArray = people.filter(function (el) 
+  {
+    if(el.occupation == userInputOccupation) 
+    {
+      return true;
+    }
+  });
+  return newArray;
+}
 // Call the mainMenu function ONLY after you find the SINGLE person you are looking for
 //mainMenu(searchResults, people);
 // Menu function to call once you find who you are looking for
@@ -119,7 +126,7 @@ function mainMenu(person, people){
 
   switch(displayOption){
     case "info":
-      getInfo(person, people);
+      displayPerson(person);
     // TODO: get person's info
     break;
     case "family":
@@ -155,8 +162,9 @@ function searchByName(people){
   lastChars = lastChars.toLowerCase();
   lastName = lastChar + lastChars;  
 
-  let foundPerson = people.filter(function(person){
-       if(person.firstName === firstName && person.lastName === lastName){
+  let foundPerson = people.filter(function(person)
+  {   if(person.firstName === firstName && person.lastName === lastName)
+    {
       return true;
     }
     else{
@@ -164,13 +172,18 @@ function searchByName(people){
     }
   })
   // TODO: find the person using the name they entered
-  return foundPerson;
+  return foundPerson[0];
 }
 // alerts a list of people
-function displayPeople(people){
-  alert(people.map(function(person){
+function displayPeople(people)
+{ if(people.length > 0)
+  { alert(people.map(function(person)
+    {
     return person.firstName + " " + person.lastName;
-  }).join("\n"));
+    }).join("\n"));
+  }else{
+    alert("No results found");
+       }
 }
 
 function displayPerson(person){
