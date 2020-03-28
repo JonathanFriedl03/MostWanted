@@ -23,8 +23,46 @@ function app(people){
     break;
   }
 }
+function searchByTraits(people) {
+  let userSearchChoice = prompt("What would you like to search by? 'height', 'weight', 'eye color', 'gender', 'age', 'occupation'.", "").toLowerCase();
+  userSearchChoice = userSearchChoice.split(", ");
+  let filteredPeople = [];
+  for(let i = 0; i < userSearchChoice.length; i++){
+  switch(userSearchChoice[i]) {
+    case "height":
+      filteredPeople.push(searchByHeight(people));
+      break;
+    case "weight":
+      filteredPeople.push(searchByWeight(people));
+      break;
+    case "eye color":
+      filteredPeople.push(searchByEyeColor(people));
+      break;
+    case "gender":
+      filteredPeople.push(searchByGender(people));
+      break;
+    case "age": 
+      filteredPeople.push(searchByAge(people));
+      break;
+    case "occupation":
+      filteredPeople.push(searchByOccupation(people));
+      break;
+    default:
+      alert("You entered an invalid search type! Please try again.");
+      searchByTraits(people);
+      break;
+  }    
+  filteredPeople = reduceArray(filteredPeople);
+  alert(filteredPeople.length + " were found matching the criteria.");
+
+    for (let i = 0; i < filteredPeople.length; i++){
+    let foundPerson = filteredPeople[i];
+    mainMenu(foundPerson, people)
+  }
+  } 
+} 
 // Call the mainMenu function ONLY after you find the SINGLE person you are looking for
-mainMenu(searchResults[0], people);
+//mainMenu(searchResults, people);
 // Menu function to call once you find who you are looking for
 function mainMenu(person, people){
   /* Here we pass in the entire person object that we found in our search, as well as the entire original dataset of people. We need people in order to find descendants and other information that the user may want. */
@@ -38,15 +76,17 @@ function mainMenu(person, people){
 
   switch(displayOption){
     case "info":
-      person = displayPerson(person);
+      getInfo(person, people);
     // TODO: get person's info
     break;
     case "family":
-      person = findFamily(person, people);
+     let familyArray = findFamily(person, people);
     // TODO: get person's family
     break;
     case "descendants":
-      person = findDescandants(person, people);
+      let descendantsArray = findDescandants(person, people);
+      console.log(person.firstName + "'s descendants");
+      //need more logic here
     // TODO: get person's descendants
     break;
     case "restart":
@@ -104,7 +144,7 @@ function displayPerson(person){
     console.log(personInfo);
   // TODO: finish getting the rest of the information to display-done
   alert(personInfo);
-  mainMenu(person,people);
+  
 }
 
 // function that prompts and validates user input
