@@ -5,11 +5,10 @@ Build all of your functions for displaying and gathering information below (GUI)
 
 // app is the function called to start the entire application
 function app(people){
-  let searchType = promptFor("Do you know the name of the person you are looking for? Enter 'yes' or 'no'", yesNo).toLowerCase();
+  var searchType = promptFor("Do you know the name of the person you are looking for? Enter 'yes' or 'no'", yesNo).toLowerCase();
   switch(searchType){
     case 'yes':
-      var person = searchByName(people); 
-      mainMenu(searchResults,people);
+      mainMenu(searchByName(people),people);
       break;
     case 'no':
       // TODO: search by traits | search by traits will be called by searchByMultipleCriterion
@@ -22,7 +21,57 @@ function app(people){
     break;
   }
  }
- function promptForTraitChoice(people){
+  // Call the mainMenu function ONLY after you find the SINGLE person you are looking for
+ //mainMenu(searchResults, people);
+ // Menu function to call once you find who you are looking for
+ /* Here we pass in the entire person object that we found in our search, as well as the entire original dataset of people. We need people in order to find descendants and other information that the user may want. */
+ function mainMenu(person, people){
+    if(!person){
+      alert("Could not find that individual.");
+      return app(people); // restart
+    }
+    var displayOption = prompt("Found " + person.firstName + " " + person.lastName + " . Do you want to know their 'info', 'family', or 'descendants'? Type the option you want or 'restart' or 'quit'");
+    switch(displayOption){
+      // TODO: get person's info-done
+      case "info": 
+        displayPerson(person);
+        mainMenu(person, people);
+        break;
+      // TODO: get person's family-done
+      case "family":
+        displayFamily(getSpouse(person, people), getParents(person, people)[0], getParents(person, people)[1]);
+        mainMenu(person, people);
+        break;
+      case "descendants":
+      // TODO: get person's descendants-started function below
+        let descendantsArray = findDescandants(person, people);
+        console.log(person.firstName + "'s descendants");      
+        break;
+      case "restart":
+      // restart
+        app(people); 
+        break;
+      case "quit":
+      // stop execution
+        return; 
+      default:
+        return mainMenu(person, people); //ask again
+    }
+  }
+
+  function searchByName(people){
+    var firstName = promptFor("What is the person's first name?", chars);
+    var lastName = promptFor("What is the person's last name?", chars);
+
+    let filteredPeople = people.filter(function(el) {
+      if(el.firstName == firstName && el.lastName == lastName) {
+        return el;
+      }
+    })[0];
+    return filteredPeople;
+  }  
+
+function promptForTraitChoice(people){
   var searchType = promptFor("Would you like to search by one or multiple traits? Enter: 'one' or 'multiple'", oneMultiple).toLowerCase();
   switch(searchType){
     case 'one':
@@ -123,23 +172,27 @@ function app(people){
   switch(trait){
     case "dob":
       trait = "DOB"
+      return trait;
       break;
     case "height":
       trait = "Height"
+      return trait;
       break;
     case "weight":
       trait = "Weight"
+      return trait;
       break;
     case "eyeColor":
       trait = "Eye Color"
+      return trait;
       break;
     case "occupation":
       trait = "occupation"
+      return trait
       break;
   }
   return trait
  }  
-
 
  function searchByHeight(people) {
   let userInputHeight = prompt("How tall is the person in inches", "");
@@ -236,128 +289,86 @@ function app(people){
  });
   return newArray;
  }
- // Call the mainMenu function ONLY after you find the SINGLE person you are looking for
- //mainMenu(searchResults, people);
- // Menu function to call once you find who you are looking for
- /* Here we pass in the entire person object that we found in our search, as well as the entire original dataset of people. We need people in order to find descendants and other information that the user may want. */
- function mainMenu(person, people){
-  let foundPerson = person.map(function(person){
-  if(!person){
-    alert("Could not find that individual.");
-    return app(people); // restart
-  }
-  let displayOption = prompt("Found " + person.firstName + " " + person.lastName + " . Do you want to know their 'info', 'family', or 'descendants'? Type the option you want or 'restart' or 'quit'");
 
-  switch(displayOption){
-    case "info":
-      displayPerson(person);
-       // TODO: get person's info-done
-      break;
-    case "family":
-      findFamily(person, people);
-      // TODO: get person's family-done
-      break;
-    case "descendants":
-      let descendantsArray = findDescandants(person, people);
-      console.log(person.firstName + "'s descendants");      
-       // TODO: get person's descendants-started function below
-      break;
-    case "restart":
-      app(people); // restart
-      break;
-    case "quit":
-      return; // stop execution
-    default:
-      return mainMenu(person, people); //ask again
-    }
-  }) 
- }
 
  function findDescendants(people, person, descendantsArray = []){  //needs to be completed
-  let newDescendantsArray = [];
- }
-
- function findFamily(people, person){
-    let spouse;//not sure why these 3 variables are saying theyre not being used..syntax error maybe? brackets?
-    let parentsArray = [];
-    let siblingsArray;
-    let descendantsArray = [];//needs a function
-    spouse = getSpouse(people, person);//started a function-done
-    parentsArray = getParents(people, person);//needs a function-done
-    siblingsArray = getSiblings(people, person);//needs a function-done
-    descendantsArray = getChildren(people, person);//started a function
+    let newDescendantsArray = [];
   }
 
- function getSpouse(people, person){
- for (let i = 0; i < people.length; i++){
-  if (people[i].currentSpouse === person.personId){
-    console.log(person.firstName + " " + person.lastName + " is married to " + people[i].firstName + " " + people[i].lastName + ".");
-    return people[i];
-    } 
-  } 
- } 
-
- function getParents(people, person, parentsArray = [])
- {people.filter(function(el)
-  {for (let i = 0; i < person.parents.length; i++)
-    {if (el.personId === person.parents[i]) 
-      {console.log(el.firstName + " " + el.lastName + " is the parent of " + person.firstName + " " + person.lastName + ".");
-      parentsArray.push(el);
-      return true; 
+ function displayFamily(spouse=null, parent1=null, parent2=null, siblings=null){
+    var family = "";
+    if(spouse !=null){
+      family = "Spouse: " + spouse.firstName + " " + spouse.lastName + "\n";
+    }
+    if(parent1 !=null){
+      family += "Parent 1: " + parent1.firstName + " " + parent1.lastName + "\n";
+    }
+    if(parent2 !=null){
+      family += "Parent 2: " + parent2.firstName + " " + parent2.lastName + "\n";
+    }
+    if(siblings !=null){
+      for(sibling in siblings)
+      {
+        family += "Sibling" + (parseInt(sibling) + 1) + "; " + siblings[sibling].firstName + " " + siblings[sibling].lastName + "\n";
       }
-      else{
-         return false;
-      } 
-    } 
-  });return parentsArray;
- }
+    }
+    alert(family);
+  }
 
- function getSiblings(people, person)
- { let siblingsArray = [];
-  people.filter(function(el)
-  {for (let i = 0; i < el.parents.length; i++)
-    {for (let j = 0; j < person.parents.length; j++)
-      {if (el.parents[i] === person.parents[j])
-        {if(el.personId !== person.personId)
-          {console.log(el.firstName + " " + el.lastName + " is " + person.firstName + " " + person.lastName + "'s sibling.")
-             siblingsArray.push(el);
-             return true;
-          }
-           else{
-             return false;
-               }
+    // let spouse;//not sure why these 3 variables are saying theyre not being used..syntax error maybe? brackets?
+    // let parentsArray = [];
+    // let siblingsArray;
+    // let descendantsArray = [];//needs a function
+    // spouse = getSpouse(people, person);//started a function-done
+    // parentsArray = getParents(people, person);//needs a function-done
+    // siblingsArray = getSiblings(people, person);//needs a function-done
+    // descendantsArray = getChildren(people, person);//started a function
+
+ function getSpouse(person, people) {
+   let spouse = people.filter(function(el) {
+      if(el.id === person.currentSpouse) {
+        return el;
+      }
+    })[0];
+    return spouse;
+  } 
+
+  function getParents(person, people){
+    let parents = people.filter(function(el) {
+        if (person.parents.some(x => x === el.id)) {
+          return el.firstName + " " + el.lastName + ", ";
         }
-      } 
-    } 
-  }); return siblingsArray;
- }
+      })
+      return parents;
+  }
+
+  function getSiblings(people, person) {
+    let siblingsArray = [];
+    people.filter(function(el) {
+      for(let i = 0; i < el.parents.length; i++) {
+        for(let j = 0; j < person.parents.length; j++) {
+          if(el.parents[i] === person.parents[j]) {
+            if(el.personId !== personId) {
+              console.log(el.firstName + " " + el.lastName + " is " + person.firstName + " " + person.lastName + "'s sibling.")
+              return true;
+            }
+            else{
+              return false;
+            }
+          }
+        }
+      }
+    });return siblingsArray
+  }
 
  function getChildren(people, person)//needs to be finished and will need to have get descendants incorporated somehow
- {
-  return childrenArray;
- }
-
- function searchByName(people){
-  var firstName = promptFor("What is the person's first name?", chars);
-  var lastName = promptFor("What is the person's last name?", chars);
-
-    let filteredPeople = people.filter(function(el){
-    if(el.firstName === firstName && el.lastName === lastName){
-      return el;
-    }
-  });
-  if(filteredPeople.length === 1){
-    var person = filteredPeople[0];
-    mainMenu(people, person);
+  {
+    return childrenArray;
   }
-  else{
-      mainMenu(people, filteredPeople);
-  }
- }
 
  // alerts a list of people
  function displayPeople(people) {
-  alert(people.map(function (person) {
+  alert(people.map(function (person){
     return person.firstName + " " + person.lastName + " " + person.gender + " " + person.dob + " " + person.height + " " + person.weight + " " + person.eyeColor + " " + person.occupation
   }).join("\n"));
  }
@@ -396,14 +407,11 @@ function app(people){
  function oneMultiple(input){
   return input.toLowerCase() == "one" || input.toLowerCase() == "multiple";
  }
- function oneTrait(input){
-  var inputs = ["First Name", "Last Name", "Date of Birth", "Height", "Weight", "Eye Color", "Occupation", "Done"]
+function oneTrait(input){
+  var inputs = ["DOB", "Height", "Weight", "Eye Color", "Occupation", "Done"]
   return inputs.some(x => x == input);
 }
-// function singleTrait(input){
-//   var inputs = ["DOB", "Height", "Weight", "Eye Color", "Occupation", "Done"]
-//   return inputs.some(x => x == input);
-// }
+
 // function searchByTraits(people) {
 //   let userSearchChoice = prompt("What would you like to search by? 'height', 'weight', 'eye color', 'gender', 'age', 'occupation'.", "").toLowerCase();
 //   userSearchChoice = userSearchChoice.split(", ");
